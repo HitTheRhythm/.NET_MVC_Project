@@ -27,6 +27,18 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<Movie>(ConfigureMovie);
             modelBuilder.Entity<Trailer>(ConfigureTrailer);
+            modelBuilder.Entity<Cast>(ConfigureCast);
+            modelBuilder.Entity<Crew>(ConfigureCrew);
+            modelBuilder.Entity<Favorite>(ConfigureFavorite);
+            modelBuilder.Entity<MovieCast>(ConfigureMovieCast);
+            //modelBuilder.Entity<Purchase>(ConfigurePurchase);
+            //modelBuilder.Entity<Review>(ConfigureReview);
+            //modelBuilder.Entity<Role>(ConfigureRole);
+            //modelBuilder.Entity<User>(ConfigureUser);
+            //modelBuilder.Entity<UserRole>(ConfigureUserRole);
+            //modelBuilder.Entity<MovieCrew>(ConfigureMovieCrew);
+
+
         }
 
         private void ConfigureTrailer(EntityTypeBuilder<Trailer> builder)
@@ -55,5 +67,57 @@ namespace Infrastructure.Data
             builder.Property(m => m.CreatedDate).HasDefaultValueSql("getdate()");
             builder.Ignore(m => m.Rating);
         }
+        
+        private void ConfigureCast(EntityTypeBuilder<Cast> builder)
+        {
+            builder.ToTable("Cast");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.Name).HasMaxLength(128);
+            builder.Property(t => t.Gender);
+            builder.Property(t => t.TmdbUrl);
+            builder.Property(t => t.ProfilePath).HasMaxLength(2084);
+
+        }
+
+        private void ConfigureCrew(EntityTypeBuilder<Crew> builder)
+        {
+            builder.ToTable("Crew");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.Name).HasMaxLength(128);
+            builder.Property(t => t.Gender);
+            builder.Property(t => t.TmdbUrl);
+            builder.Property(t => t.ProfilePath).HasMaxLength(2084);
+        }
+
+        private void ConfigureFavorite(EntityTypeBuilder<Favorite> builder)
+        {
+            builder.ToTable("Favorite");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.MovieId);
+            builder.Property(t => t.UserId);
+        }
+
+        private void ConfigureMovieCast(EntityTypeBuilder<MovieCast>builder)
+        {
+            builder.HasKey(t =>new {  t.MovieId, t.CastId, t.Character });
+        }
+
+        //private void ConfigurePurchase(EntityTypeBuilder<Purchase> builder)
+        //{
+        //    builder.HasKey("Id");
+        //    builder.Property(t => t.UserId);
+        //    builder.Property(t => t.PurchaseNumber);
+        //    builder.Property(t => t.TotalPrice);
+        //    builder.Property(t => t.PurchaseDateTime);
+        //    builder.Property(t => t.MovieId);
+
+        //}
+
+        //private void ConfigureReview(EntityTypeBuilder<Review> builder)
+        //{
+        //    builder.HasKey(t => new { t.MovieId, t.UserId });
+        //    builder.Property(t => t.Rating);
+        //    builder.Property(t => t.ReviewText);
+        //}
     }
 }

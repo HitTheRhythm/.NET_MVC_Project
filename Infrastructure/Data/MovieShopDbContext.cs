@@ -31,10 +31,10 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Crew>(ConfigureCrew);
             modelBuilder.Entity<Favorite>(ConfigureFavorite);
             modelBuilder.Entity<MovieCast>(ConfigureMovieCast);
-            //modelBuilder.Entity<Purchase>(ConfigurePurchase);
-            //modelBuilder.Entity<Review>(ConfigureReview);
-            //modelBuilder.Entity<Role>(ConfigureRole);
-            //modelBuilder.Entity<User>(ConfigureUser);
+            modelBuilder.Entity<Purchase>(ConfigurePurchase);
+            modelBuilder.Entity<Review>(ConfigureReview);
+            modelBuilder.Entity<Role>(ConfigureRole);
+            modelBuilder.Entity<User>(ConfigureUser);
             //modelBuilder.Entity<UserRole>(ConfigureUserRole);
             //modelBuilder.Entity<MovieCrew>(ConfigureMovieCrew);
 
@@ -99,25 +99,53 @@ namespace Infrastructure.Data
 
         private void ConfigureMovieCast(EntityTypeBuilder<MovieCast>builder)
         {
+            builder.ToTable("MovieCast");
             builder.HasKey(t =>new {  t.MovieId, t.CastId, t.Character });
         }
 
-        //private void ConfigurePurchase(EntityTypeBuilder<Purchase> builder)
-        //{
-        //    builder.HasKey("Id");
-        //    builder.Property(t => t.UserId);
-        //    builder.Property(t => t.PurchaseNumber);
-        //    builder.Property(t => t.TotalPrice);
-        //    builder.Property(t => t.PurchaseDateTime);
-        //    builder.Property(t => t.MovieId);
+        private void ConfigurePurchase(EntityTypeBuilder<Purchase> builder)
+        {
+            builder.ToTable("Purchase");
+            builder.HasKey(t=>t.Id);
+            builder.Property(t => t.UserId);
+            builder.Property(t => t.PurchaseNumber);
+            builder.Property(t => t.TotalPrice).HasColumnType("decimal(18,2)");
+            builder.Property(t => t.PurchaseDateTime);
+            builder.Property(t => t.MovieId);
 
-        //}
+        }
 
-        //private void ConfigureReview(EntityTypeBuilder<Review> builder)
-        //{
-        //    builder.HasKey(t => new { t.MovieId, t.UserId });
-        //    builder.Property(t => t.Rating);
-        //    builder.Property(t => t.ReviewText);
-        //}
+        private void ConfigureReview(EntityTypeBuilder<Review> builder)
+        {
+            builder.ToTable("Review");
+            builder.HasKey(t => new { t.MovieId, t.UserId });
+            builder.Property(t => t.Rating).HasColumnType("decimal(18,2)");
+            builder.Property(t => t.ReviewText);
+        }
+
+        private void ConfigureRole(EntityTypeBuilder<Role> builder)
+        {
+            builder.ToTable("Role");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.Name);
+        }
+
+        private void ConfigureUser(EntityTypeBuilder<User> builder)
+        {
+            builder.ToTable("User");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.FirstName);
+            builder.Property(t => t.LastName);
+            builder.Property(t => t.DateOfBirth);
+            builder.Property(t => t.Email);
+            builder.Property(t => t.HashedPassword);
+            builder.Property(t => t.Salt);
+            builder.Property(t => t.PhoneNumber);
+            builder.Property(t => t.TwoFactorEnabled);
+            builder.Property(t => t.LockoutEndDate);
+            builder.Property(t => t.LastLoginDateTime);
+            builder.Property(t => t.IsLocked);
+            builder.Property(t => t.AccessFailedCount);
+        }
     }
 }
